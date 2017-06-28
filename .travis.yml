@@ -3,9 +3,9 @@ language: node_js
 node_js:
   - "7"
 
-sudo: false
-
-cache: yarn
+  sudo: false
+  
+  cache: yarn
 
 before_install:
   - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 0.21.3
@@ -16,3 +16,12 @@ script:
 after_success:
   - codecov
 
+before_deploy:
+  - yarn run build
+  - cp ./build/index.html ./build/200.html
+
+deploy:
+  provider: surge
+  project: ./build/
+  domain: mistik.surge.sh
+  skip_cleanup: true
